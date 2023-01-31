@@ -18,9 +18,6 @@ code to make it work for this. That’s OK! Reworking old code is
 an important part of a programmer’s life.
 */
 
-/* sempre que há uma ronda aparece um paragrafo com o resultado 
-*/
-
 const rockStr = "Rock";
 const paperStr = "Paper";
 const scissorsStr = "Scissors";
