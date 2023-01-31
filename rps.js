@@ -18,36 +18,73 @@ code to make it work for this. That’s OK! Reworking old code is
 an important part of a programmer’s life.
 */
 
+/* sempre que há uma ronda aparece um paragrafo com o resultado 
+*/
+
+const rockStr = "Rock";
+const paperStr = "Paper";
+const scissorsStr = "Scissors";
+
+let newGame = false;
 const btns = document.querySelectorAll(".choiceBtn");
 btns.forEach((choiceBtn) => {
 
     choiceBtn.addEventListener("click",() => {
+        const gameResults = document.querySelector(".results");
+
+        if(newGame){
+            console.log(gameResults.childElementCount)
+            //e.firstElementChild can be used.
+            let child = gameResults.lastElementChild; 
+            while (child) {
+                gameResults.removeChild(child);
+                child = gameResults.lastElementChild;
+            }
+            newGame = false;
+        }
 
         let playerSelection = choiceBtn.textContent;
         let computerSelection = getComputerChoice();
         let game = playRound(playerSelection, computerSelection);
-        const gameResults = document.querySelector(".results");
-        gameResults.textContent = game;
         
+        //gameResults.textContent = game;
+        const para = document.createElement("p");
+        const paraScore = document.createElement("p");
+
+        paraScore.textContent = "Score: Player " + playerWin + " - " + computerWin + " Computer.";
+        
+        para.textContent = "Player: " + playerSelection;
+        para.textContent += " Computer: " + computerSelection + " ";
+        para.textContent += game;
+
         if(playerWin === 5){
-            gameResults.textContent=  "You won!!";
+            para.textContent = "You won the game!"
+            playerWin = 0;
+            computerWin = 0;
+            newGame = true;
         }
         else if (computerWin === 5){
-            gameResults.textContent=  "Computer won!!";
+            para.textContent = "You lost the game! :("
+            playerWin = 0;
+            computerWin = 0;
+            newGame = true;
         }
+        gameResults.appendChild(paraScore);
+        gameResults.appendChild(para);
     });
 
 });
+
 
 function getComputerChoice() {
 
     let choice = Math.floor(Math.random() * 3);
     if (choice === 0)
-        return "rock";
+        return rockStr;
     else if (choice === 1)
-        return "paper";
+        return paperStr;
     else (choice === 2)
-    return "scissors";
+    return scissorsStr;
 
 }
 
@@ -68,19 +105,19 @@ let computerWin = 0;
 function playRound(playerSelection, computerSelection) {
 
     
-    if ((playerSelection === "rock" && computerSelection === "paper") ||
-        (playerSelection === "scissors" && computerSelection === "rock") ||
-        (playerSelection === "paper" && computerSelection === "scissors")) {
+    if ((playerSelection === rockStr && computerSelection === paperStr) ||
+        (playerSelection === scissorsStr && computerSelection === rockStr) ||
+        (playerSelection === paperStr && computerSelection === scissorsStr)) {
             computerWin = computerWin + 1;
-            return "You lose!";
-    } else if (playerSelection === "rock" && computerSelection === "scissors" ||
-        (playerSelection === "scissors" && computerSelection === "paper") ||
-        (playerSelection === "paper" && computerSelection === "rock")) {
+            return "You lose the round!";
+    } else if (playerSelection === rockStr && computerSelection === scissorsStr ||
+        (playerSelection === scissorsStr && computerSelection === paperStr) ||
+        (playerSelection === paperStr && computerSelection === rockStr)) {
             playerWin = playerWin + 1;
-            return "You win!";
-    } else if (playerSelection === "rock" && computerSelection === "rock" ||
-        (playerSelection === "scissors" && computerSelection === "scissors") ||
-        (playerSelection === "paper" && computerSelection === "paper")) {
+            return "You won the round!";
+    } else if (playerSelection === rockStr && computerSelection === rockStr ||
+        (playerSelection === scissorsStr && computerSelection === scissorsStr) ||
+        (playerSelection === paperStr && computerSelection === paperStr)) {
             return "It's a tie!";
     }
 }
